@@ -1,12 +1,25 @@
-import { signIn } from 'next-auth/react';
-import "public/styles/globals.css";
-import Navbar from "../components/Navbar";
+import { signIn, useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 const LoginPage = () => {
+  var session = useSession()
+  var router = useRouter()
+  var [loading, setLoading] = useState(true)
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      router.push("/")
+      setLoading(false)
+    } else if (session.status === "loading") {
+      setLoading(true)
+
+    } else {
+      setLoading(false)
+    }
+  }, [session])
   return (
     <div>
-      <Navbar />
-      <div className="logincontainer">
+      {(!loading) && <div className="logincontainer">
         <div className="logincard">
           <h3 className="text5">Login and Take Appointment</h3>
           <div className="image-container">
@@ -21,7 +34,7 @@ const LoginPage = () => {
           <div className="button-container">
             <button
               className="login-button google"
-              onClick={() => signIn("google")}
+              onClick={() => signIn("google", { callbackUrl: '/auth' })}
             >
               Login with Google
             </button>
@@ -36,7 +49,7 @@ const LoginPage = () => {
             By logging in, you accept our Terms and Conditions.
           </h5>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import "public/styles/globals.css";
 
 const Navbar = () => {
   return (
@@ -10,10 +9,12 @@ const Navbar = () => {
       <ul className="nav-links">
         <li><Link href="/" className="nav-link">Home</Link></li>
         <li><Link href="/about" className="nav-link">About</Link></li>
-        <li><Link href="/DoctorCards" className="nav-link">Doctors</Link></li>
+        <li><Link href="/doctors" className="nav-link">Doctors</Link></li>
       </ul>
 
-      <Link href="/login"><button className="login-btn">Login</button></Link>
+      <div className="btn btn-primary">
+        <Link href="/login">Login</Link>
+      </div>
     </nav>
   );
 }
