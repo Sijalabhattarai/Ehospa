@@ -60,7 +60,7 @@ function Appointment() {
                 <h3 className="text-3xl font-extralight text-white/50">Your Appointments</h3>
             </div>
             {/* make a filter with four buttons, completed, pending, cancelled and all */}
-            <div className="flex space-x-4 my-5">
+            <div className="flex space-x-4 my-5" id='filterAppoint'>
                 <button
                     className={`px-4 py-2 ${activeFilter === 'all' ? 'bg-blue-500 text-white' : 'bg-white text-black'}`}
                     onClick={() => handleFilterChange('all')}
@@ -91,7 +91,7 @@ function Appointment() {
 
 
             <div className="mb-10 sm:mb-0 mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                <div onClick={() => {
+                <div id='addAppoint' onClick={() => {
                     document.getElementById('my_modal_4').showModal()
                 }} className="group bg-gray-900/30 py-20 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-gray-900/40 hover:smooth-hover">
                     <a className="bg-gray-900/70 text-white/50 group-hover:text-white group-hover:smooth-hover flex w-20 h-20 rounded-full items-center justify-center" href="#">

@@ -48,7 +48,7 @@ const DoctorNote = ({ patientId, cancel, doctor, item, save }) => {
                 if (data.status) {
                     alert('Checked Successfully')
                     console.log(data)
-                    Save()
+                    save()
                 } else {
                     alert('Something went wrong, ' + data.message)
                 }

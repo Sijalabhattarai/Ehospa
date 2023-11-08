@@ -196,7 +196,7 @@ function Assistant() {
     return (
         <div className='h-screen flex justify-center items-center flex-col w-full '>
             <h2 className='text p-5 sm:text-xl text-3xl text-warning font-bold'>Ask Dr. Cap, our GPT-3 Powered AI Doctor, assisting you with your problem</h2>
-            {(!appointmentMode) && <div className="chatBox flex h-5/6 w-3/4 antialiased text-gray-600 ">
+            {(!appointmentMode) && <div id='assisMenu' className="chatBox flex h-5/6 w-3/4 antialiased text-gray-600 ">
                 <div className="flex flex-row h-full w-full overflow-x-hidden">
                     <div className="flex flex-col flex-auto h-full p-6">
                         <div

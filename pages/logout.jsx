@@ -9,6 +9,7 @@ function logout() {
     useEffect(() => {
         if (session.status === 'authenticated') {
             signOut()
+            router.push('/')
         } else if (session.status === 'unauthenticated') {
             router.push('/')
         }
