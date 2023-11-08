@@ -12,7 +12,7 @@ export default async function handler(req, res) {
         // sort by date uploaded latest
 
         data.sort(function (a, b) {
-            return new Date(a.appointmentDate) - new Date(b.appointmentDate);
+            return new Date(b.appointmentDate) - new Date(a.appointmentDate);
         });
 
 

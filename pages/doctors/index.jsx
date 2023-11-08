@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Card from "../../components/Card";
+import Card from "../components/Card";
 
-const Doctors = () => {
+const DoctorCards = () => {
     const [doctorData, setDoctorData] = useState([]);
 
     function fetchDoctors() {
         fetch('/api/doctor/getall')
             .then(res => res.json())
             .then(data => {
-                // setDoctorData(data);
                 console.log(data);
                 if (data.status == 'success') {
                     setDoctorData(data.data);
@@ -41,5 +40,5 @@ const Doctors = () => {
     );
 };
 
-export default Doctors;
+export default DoctorCards;
 

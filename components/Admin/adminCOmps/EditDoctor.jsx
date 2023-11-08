@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react'
 // import Booked from './Booked'
 import { useRouter } from 'next/router'
 
-function Adddoctor({ done, closeDoc }) {
+function EditDoctor({ docID }) {
     var session = useSession()
     var [user, setUser] = useState({})
-    var [loading, setLoading] = useState(false)
+    var [loading, setLoading] = useState(true)
     var [success, setSuccess] = useState(false)
     var [data, setData] = useState([{}])
     var [show, setShow] = useState(true)
@@ -15,6 +15,10 @@ function Adddoctor({ done, closeDoc }) {
 
 
     var router = useRouter()
+    // get params from url
+    var { id } = router.query
+
+
     useEffect(() => {
         if (session.status === "authenticated") {
             setUser(session.data.user)
@@ -28,39 +32,33 @@ function Adddoctor({ done, closeDoc }) {
         setLoading(true)
         setShow(false)
 
-        var appoint = {
-            email: document.getElementById('emailAddress').value,
-            speciality: document.getElementById('speciality').value,
-            name: document.getElementById('name').value,
-            phone: document.getElementById('phone').value,
-            image: image
+        if (!!image) {
+            image = document.getElementById('image2').value
+        } else {
+            image = data.image
         }
 
-        fetch('/api/doctor/create', {
-            method: 'POST',
+        var appoint = {
+            email: document.getElementById('emailAddress2').value,
+            speciality: document.getElementById('speciality2').value,
+            name: document.getElementById('name2').value,
+            phone: document.getElementById('phone2').value,
+            image: image,
+            available: document.getElementById('check').checked
+        }
+        fetch('/api/doctor/edit', {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(appoint)
         }).then(res => res.json()).then(data => {
-            if (data.status === 'fill') {
-                alert('Please fill all the fields')
-                setLoading(false)
-                setShow(true)
-                return
-            } else if (data.status === 'success') {
+            console.log(data)
+            if (data.status === 'success') {
                 setLoading(false)
                 setShow(false)
                 setSuccess(true)
                 setData(data.data)
-                done()
-                closeDoc()
-                setTimeout(() => {
-                    setSuccess(false)
-                    setShow(true)
-                    setLoading(false)
-                    setImage('')
-                }, 1000);
                 return
             } else if (data.status === 'fail') {
                 setError(true)
@@ -68,13 +66,46 @@ function Adddoctor({ done, closeDoc }) {
                     setError(false)
                     setShow(true)
                     setLoading(false)
-                    setImage('')
 
                 }, 1000);
                 alert('Error updating your data message ' + data.message)
             }
         })
     }
+
+    function getDoctor() {
+        fetch('/api/doctor/getone?id=' + docID, {
+            method: 'GET',
+
+        }).then(res => res.json()).then(data => {
+            if (data.success == true) {
+                setData(data.data)
+                setLoading(false)
+            } else {
+                setError(true)
+                setTimeout(() => {
+                    setError(false)
+
+                }, 1000);
+            }
+
+            console.log(data)
+        })
+    }
+
+    useEffect(() => {
+        if (id) {
+            getDoctor()
+        }
+    }
+        , [id])
+
+
+
+    if (loading) {
+        return <h1>Loading...</h1>
+    }
+
 
     return (
         <div>
@@ -83,22 +114,27 @@ function Adddoctor({ done, closeDoc }) {
                     <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                         <div>
                             <label class="text-white dark:text-gray-200" for="name">Name</label>
-                            <input id="name" type="text" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+                            <input defaultValue={data?.name} id="name2" type="text" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
                         </div>
 
                         <div>
                             <label class="text-white dark:text-gray-200" for="phone">Mobile Number</label>
-                            <input id="phone" type="number" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+                            <input defaultValue={data?.phone} id="phone2" type="number" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+                        </div>
+
+                        <div className='flex gap-2 items-center'>
+                            <label class="text-white dark:text-gray-200" for="emailAddress">Available</label>
+                            <input defaultChecked={data?.available} id="check" type="checkbox" class="block px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600  focus:ring" />
                         </div>
 
                         <div>
                             <label class="text-white dark:text-gray-200" for="emailAddress">Email Address</label>
-                            <input id="emailAddress" type="email" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+                            <input defaultValue={data?.email} id="emailAddress2" type="email" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
                         </div>
 
                         <div>
                             <label class="text-white dark:text-gray-200" for="passwordConfirmation">Select speciality</label>
-                            <select id='speciality' class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                            <select defaultValue={data.speciality} id='speciality2' class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
                                 <option>Physician</option>
                                 <option>Psycatrist</option>
                                 <option>Cardiologist</option>
@@ -119,15 +155,20 @@ function Adddoctor({ done, closeDoc }) {
                             </label>
                             <div>
                                 <label class="text-white dark:text-gray-200" for="name">Image Url</label>
-                                <input id="image" type="text" onChange={(e) => setImage(e.target.value)} class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+                                <input defaultValue={data.image} id="image2" type="text" onChange={(e) => setImage(e.target.value)} class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
 
 
                             </div>
                             <img src={image} className='h-20 w-20 object-contain' />
                         </div>
+
+
+
+
+
                     </div>
                     <div class="flex justify-end mt-6">
-                        <button class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600" onClick={Adddoctorment}>Add Doctor</button>
+                        <button class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600" onClick={Adddoctorment}>Edit Doctor</button>
                     </div>
                 </form>
             </section>}
@@ -156,11 +197,11 @@ function Adddoctor({ done, closeDoc }) {
                 </div>
             }
             {(success) &&
-                <h3 className="text-xl font-bold">Doctor Added Successfully</h3>
+                <h3 className="text-xl font-bold">Doctor Edited Successfully</h3>
             }
 
             {(error) && <>
-                <h2>Error updating your Data</h2>
+                <h2>Error fetching Data. Please close this model and open again</h2>
             </>}
 
 
@@ -168,4 +209,4 @@ function Adddoctor({ done, closeDoc }) {
     )
 }
 
-export default Adddoctor
+export default EditDoctor

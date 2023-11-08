@@ -5,6 +5,8 @@ import { BsPersonFillAdd } from 'react-icons/bs'
 import Link from 'next/link'
 import Doctors from './adminCOmps/Doctors'
 import Appointment from './adminCOmps/Appointment'
+import Allusers from './adminCOmps/Allusers'
+import { FiUsers } from 'react-icons/fi'
 
 
 function Adminhome(user) {
@@ -40,9 +42,7 @@ function Adminhome(user) {
                             <BsPersonFillAdd />
                         </a>
                         <a className={`${(option == 'assistant') && 'bg-gray-800'} p-4 inline-flex justify-center rounded-md hover:bg-gray-800 hover:text-white smooth-hover`} onClick={() => setOption('assistant')}>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                            </svg>
+                            <FiUsers />
                         </a>
                     </nav>
                     <div className={`${(option == 'admin') && 'bg-gray-800'} flex items-center flex-row space-x-2 lg:space-x-0 lg:flex-col lg:space-y-2`}>
@@ -58,7 +58,7 @@ function Adminhome(user) {
                 <div className="flex h-screen overflow-scroll scroll-hidden p-2 w-full">
                     {(option == 'doctors') && <Doctors />}
                     {(option == 'appointment') && <Appointment />}
-                    {/* {(option == 'assistant') && <Assistant />} */}
+                    {(option == 'assistant') && <Allusers />}
 
                 </div>
             </div>

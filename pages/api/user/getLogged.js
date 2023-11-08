@@ -4,9 +4,10 @@ import user from "../../../db/modals/user";
 
 export default async function handler(req, res) {
     if (req.method !== "GET") {
-        return res.send("Hello World")
+        return res.send({ "Message": "Hello World" })
     }
     var session = await getSession({ req });
+    console.log(session);
     connect();
     if (!session) {
         return res.status(401).json({ error: "You need to be signed in" })
@@ -19,7 +20,7 @@ export default async function handler(req, res) {
             _id: data._id,
             role: data.role
         }
-        return res.status(200).json({ data: refineData })
+        return res.status(200).json({ message: "GOT", data: refineData })
     }
 }
 
