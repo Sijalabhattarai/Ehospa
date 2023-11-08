@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 
-function Hometab(user) {
+function Hometab({ user }) {
 
     let [appointment, setAppointments] = useState({})
     let [reqdate, setReqdate] = useState("")

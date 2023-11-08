@@ -71,7 +71,7 @@ function Doctors() {
             <dialog id="editModel" className="modal">
                 <div className="modal-box w-11/12 max-w-5xl">
                     <h3 className="font-bold text-lg">Edit a Doctor</h3>
-                    <EditDoctor docID={docID} />
+                    <EditDoctor doneEdit={getAll} close={closeModel} docID={docID} />
                     <div className="modal-action">
                         <button onClick={closeModel} className="btn">Close</button>
                     </div>

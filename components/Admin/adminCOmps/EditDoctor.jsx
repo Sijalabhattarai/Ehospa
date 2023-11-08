@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 // import Booked from './Booked'
 import { useRouter } from 'next/router'
 
-function EditDoctor({ docID }) {
+function EditDoctor({ docID, doneEdit, close }) {
     var session = useSession()
     var [user, setUser] = useState({})
     var [loading, setLoading] = useState(true)
@@ -25,6 +25,7 @@ function EditDoctor({ docID }) {
         } else {
             setUser({})
         }
+
     }, [session.status])
 
     function Adddoctorment() {
@@ -59,6 +60,16 @@ function EditDoctor({ docID }) {
                 setShow(false)
                 setSuccess(true)
                 setData(data.data)
+                doneEdit()
+                setTimeout(() => {
+                    close()
+                    setSuccess(false)
+                    setLoading(false)
+                    setShow(true)
+                    setImage('')
+
+                }, 1000);
+
                 return
             } else if (data.status === 'fail') {
                 setError(true)
@@ -73,14 +84,15 @@ function EditDoctor({ docID }) {
         })
     }
 
-    function getDoctor() {
+    function getDoctor(e) {
         fetch('/api/doctor/getone?id=' + docID, {
             method: 'GET',
 
         }).then(res => res.json()).then(data => {
-            if (data.success == true) {
+            if (data.success) {
                 setData(data.data)
                 setLoading(false)
+                renderValue(data.data)
             } else {
                 setError(true)
                 setTimeout(() => {
@@ -94,16 +106,37 @@ function EditDoctor({ docID }) {
     }
 
     useEffect(() => {
+        console.log(docID)
         if (id) {
-            getDoctor()
+            getDoctor(id)
         }
-    }
-        , [id])
+
+    }, [id, docID])
 
 
 
     if (loading) {
         return <h1>Loading...</h1>
+    }
+
+    function renderValue(e) {
+        let name = document.getElementById('name2')
+        let phone = document.getElementById('phone2')
+        let email = document.getElementById('emailAddress2')
+        let speciality = document.getElementById('speciality2')
+        let image = document.getElementById('image2')
+        let check = document.getElementById('check')
+        try {
+            name.value = e.name
+            phone.value = e.phone
+            email.value = e.email
+            speciality.value = e.speciality
+            image.value = e.image
+            check.checked = e.available
+        } catch (error) {
+
+        }
+
     }
 
 
@@ -134,7 +167,7 @@ function EditDoctor({ docID }) {
 
                         <div>
                             <label class="text-white dark:text-gray-200" for="passwordConfirmation">Select speciality</label>
-                            <select defaultValue={data.speciality} id='speciality2' class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                            <select defaultValue={data?.speciality} id='speciality2' class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
                                 <option>Physician</option>
                                 <option>Psycatrist</option>
                                 <option>Cardiologist</option>
@@ -155,7 +188,7 @@ function EditDoctor({ docID }) {
                             </label>
                             <div>
                                 <label class="text-white dark:text-gray-200" for="name">Image Url</label>
-                                <input defaultValue={data.image} id="image2" type="text" onChange={(e) => setImage(e.target.value)} class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+                                <input defaultValue={data?.image} id="image2" type="text" onChange={(e) => setImage(e.target.value)} class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
 
 
                             </div>
