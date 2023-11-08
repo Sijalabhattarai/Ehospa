@@ -1,8 +1,28 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
 
-function Booked(data) {
-    console.log(data.data)
+function Booked(data, { closepop }) {
+    function sendMail() {
+        fetch('/api/mails/sendMail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: data.data.email,
+                queueNumber: data.data.queueNumber,
+                appointDate: data.data.appointmentDate,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+    }
+    useEffect(() => {
+        sendMail()
+    }, [])
+
     return (
         <div
             role="alert"
@@ -44,35 +64,7 @@ function Booked(data) {
 
                     </p>
 
-                    {/* <div class="mt-4 flex gap-2">
-                        <a
-                            href="#"
-                            class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
-                        >
-                            <span class="text-sm"> Preview </span>
 
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="h-4 w-4"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                                />
-                            </svg>
-                        </a>
-
-                        <button
-                            class="block rounded-lg px-4 py-2 text-gray-700 transition hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800"
-                        >
-                            <span class="text-sm">Revert</span>
-                        </button>
-                    </div> */}
                 </div>
 
                 <button

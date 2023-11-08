@@ -22,9 +22,10 @@ function Form({ data }) {
         }
     }
 
-    function onNext() {
+    function onNext(e) {
         var input = document.querySelectorAll('input')
         var select = document.querySelector('select')
+        e.preventDefault()
 
         for (var i = 0; i < input.length; i++) {
             input[i].style.border = '1px solid #e5e7eb'
@@ -153,8 +154,7 @@ function Form({ data }) {
                     </div>
                     <div className="flex items-center justify-between">
                         <button
-                            type="submit"
-                            onClick={onNext}
+                            onClick={(e)=>onNext(e)}
                             className="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
                         >
                             Next
@@ -187,9 +187,6 @@ function Form({ data }) {
                             Next
                         </button>
                     </div>
-
-
-
                 </div>}
 
             </div>

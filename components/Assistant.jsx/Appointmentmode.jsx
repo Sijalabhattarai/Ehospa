@@ -1,18 +1,5 @@
 import React, { useEffect } from 'react'
-var doctors = [
-    {
-        name: 'Dr. Ram Karki',
-    },
-    {
-        name: 'Dr. Sita Jaiswal',
-    },
-    {
-        name: 'Dr. Hari Bahadur',
-    },
-    {
-        name: 'Dr. Gita Karki',
-    },
-]
+
 
 function Appointmentmode({ response, user, specialist }) {
     var [messages, setMessages] = React.useState([])

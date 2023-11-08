@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import Adminhome from '../components/Admin/Adminhome'
+import Adminhome from '../../components/Admin/Adminhome'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 

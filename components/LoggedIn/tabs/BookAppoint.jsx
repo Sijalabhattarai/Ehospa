@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Booked from './Booked'
 import { useRouter } from 'next/router'
 
-function BookAppoint() {
+function BookAppoint({successs, closepop}) {
     var session = useSession()
     var [user, setUser] = useState({})
     var [loading, setLoading] = useState(false)
@@ -22,14 +22,14 @@ function BookAppoint() {
         }
     }, [session.status])
 
-    function bookAppointment() {
+    function bookAppointment(e) {
+        e.preventDefault()
         var date = new Date(document.getElementById('date').value)
 
         var today = new Date()
         if (date < today) {
             alert('Please select a valid date')
-
-            return
+            return;
         }
         setLoading(true)
         setShow(false)
@@ -60,14 +60,15 @@ function BookAppoint() {
                 setShow(false)
                 setSuccess(true)
                 setData(data.data)
-                router.reload()
-
+                successs()
                 return
             } else {
                 setError(true)
             }
         })
     }
+
+
 
     let [doctors, setDoctors] = useState([])
     let [specialitys, setSpecialitys] = useState('')
@@ -89,10 +90,14 @@ function BookAppoint() {
         getDoctors()
     }
         , [specialitys])
+
+    useEffect(() => {
+        setShow(true)
+    }, [])
     return (
         <div>
             {(show) && <section class="max-w-4xl p-6 mx-auto bg-indigo-600 rounded-md shadow-md dark:bg-gray-800 mt-20">
-                <form>
+                <form method='#' onSubmit={(e)=>bookAppointment(e)}>
                     <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                         <div>
                             <label class="text-white dark:text-gray-200" for="name">Name</label>
@@ -105,7 +110,7 @@ function BookAppoint() {
                         </div>
 
                         <div>
-                            <label class="text-white dark:text-gray-200" for="passwordConfirmation">Select Category</label>
+                            <label class="text-white dark:text-gray-200" for="passwordConfirmation">Select a Category</label>
                             <select id='category' onChange={(e) => setSpecialitys(e.target.value)} class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
                                 <option>Physician</option>
                                 <option>Psycatrist</option>
@@ -172,7 +177,7 @@ function BookAppoint() {
                     </div>
 
                     <div class="flex justify-end mt-6">
-                        <button class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600" onClick={bookAppointment}>Book</button>
+                        <button class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600" type='submit'>Book</button>
                     </div>
                 </form>
             </section>}
@@ -200,7 +205,7 @@ function BookAppoint() {
                     <p className="text-sm">We are booking your appointment</p>
                 </div>
             }
-            {(success) && <Booked data={data} />}
+            {(success) && <Booked data={data} closepop={closepop} />}
 
             {(error) && <>
                 <h2>Error updating your Data</h2>

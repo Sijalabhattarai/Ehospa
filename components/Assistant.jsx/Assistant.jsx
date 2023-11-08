@@ -112,7 +112,7 @@ function Assistant() {
                     'type': 'human'
                 }
                 var AIjson = {
-                    'message': 'You will now be redirected to Appointment Page. Please Fill the form Genuenly to book an Appointment!',
+                    'message': 'To Book the appointment, please click the second option on left. Thank you',
                     'type': 'ai'
                 }
                 setMessageData([...messageData, messagejson, AIjson])
@@ -121,7 +121,7 @@ function Assistant() {
                     setAppointLoading(false)
                 }, 3000);
                 setBookApp(false)
-                setAppointmentMode(true)
+                router.push('/')
                 setResponse(messageData[messageData.length - 2].message)
                 setTimeout(() => {
                     setResponse('')
@@ -151,13 +151,16 @@ function Assistant() {
                 'message': response,
                 'type': 'human'
             }
+
+
+
             getResponse(response, messagejson)
             setResponse('')
         }
     }
 
     function getResponse(e, m) {
-        fetch('/api/ai/getResponse', {
+        fetch('/api/ai/getData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -167,15 +170,24 @@ function Assistant() {
             .then(response => response.json())
             .then(data => {
                 var result = data.data
-                setSpecialist(data.data)
-                result = 'You should Visit a ' + result + ' for your problem. Do you Want me to book an Appointment for you?'
-                setBookApp(true)
-                var AIjson = {
-                    'message': result,
-                    'type': 'ai'
+                if (data.status) {
+                    setSpecialist(data.data)
+                    result = 'You should Visit a ' + result + ' for your problem. You should book an appointment. Do you want to book an appointment?'
+                    setBookApp(true)
+                    var AIjson = {
+                        'message': result,
+                        'type': 'ai'
+                    }
+                    var messagejson = m
+                    setMessageData([...messageData, messagejson, AIjson])
+                } else {
+                    var AIjson = {
+                        'message': result,
+                        'type': 'ai'
+                    }
+                    var messagejson = m
+                    setMessageData([...messageData, messagejson, AIjson])
                 }
-                var messagejson = m
-                setMessageData([...messageData, messagejson, AIjson])
                 setResponse('')
             }
             )
