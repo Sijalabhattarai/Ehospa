@@ -23,12 +23,8 @@
     "postcss-cli": "^10.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-<<<<<<< HEAD
-    "react-icons": "^4.11.0",
-=======
     "react-icons": "^4.10.1",
     "swiper": "^11.0.3",
->>>>>>> 5c5da2d45ffcbe11636a1cadf5a0a4f119cb9a2b
     "tailwindcss": "^3.3.2"
   },
   "devDependencies": {
