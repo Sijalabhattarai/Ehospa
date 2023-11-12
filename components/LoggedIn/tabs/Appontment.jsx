@@ -114,6 +114,30 @@ function Appointment() {
                     </div>
                 </dialog>
                 {appointments.map((appointment) => {
+                    let estTime
+                    function getTimeForAPpointMEnt() {
+                        let startTime = '09:00'
+                        const endTime = '17:00'
+                        // get estimated time based on queue number
+                        const queueNumber = appointment.queueNumber
+                        const timePerPatient = 20
+                        const queueTime = queueNumber * timePerPatient
+                        // if queue number is 1 then estimated time is 9:20 if queue number is 2 then estimated time is 9:40 and so on
+                        // get today only date not time
+                        const today = dayjs().format('YYYY-MM-DD')
+                        // get estimated time
+                        const estimatedTime = dayjs(`${today} ${startTime}`).add(queueTime, 'minute').format('HH:mm')
+                        // if estimate time crosses 5 pm then set it to 5 pm
+                        if (dayjs(`${today} ${estimatedTime}`).isAfter(dayjs(`${today} ${endTime}`))) {
+                            estTime = endTime
+                        } else {
+                            estTime = estimatedTime
+                        }
+                    }
+
+                    getTimeForAPpointMEnt()
+
+
                     let today = new Date()
                     let date = new Date(appointment.appointmentDate)
                     dayjs.extend(relativeTime)
@@ -132,6 +156,8 @@ function Appointment() {
                                 <img className="w-20 h-20 object-cover object-center rounded-full" src="https://s-media-cache-ak0.pinimg.com/originals/26/4e/30/264e30439c42387c1e3c48d2d038429d.png" alt="cuisine" />
                                 <h4 className="text-white text-2xl font-bold capitalize text-center">{appointment.category}</h4>
                                 <p className="text-white/50">{reqdate} | Queue Number {appointment.queueNumber}</p>
+                                <p className="text-white/50">Estimated Time:  {estTime} AM</p>
+
                                 <p className="absolute top-2 text-white/20 inline-flex items-center text-xs">
                                     {(appointment.status) || 'Pending'}
                                     <span className="ml-2 w-2 h-2 block bg-green-500 rounded-full group-hover:animate-pulse"></span></p>
@@ -143,7 +169,7 @@ function Appointment() {
                             <img className="w-20 h-20 object-cover object-center rounded-full" src="https://s-media-cache-ak0.pinimg.com/originals/26/4e/30/264e30439c42387c1e3c48d2d038429d.png" alt="cuisine" />
                             <h4 className="text-white text-2xl font-bold capitalize text-center">{appointment.category}</h4>
                             <p className="text-white/50">{reqdate} | Queue Number {appointment.queueNumber}</p>
-                            <p className="absolute top-2 text-white/20 inline-flex items-center text-xs">Completed <span className="ml-2 w-2 h-2 block bg-red-500 rounded-full group-hover:animate-pulse"></span></p>
+                            <p className="absolute top-2 text-white/20 inline-flex items-center text-xs">{appointment.status} <span className="ml-2 w-2 h-2 block bg-red-500 rounded-full group-hover:animate-pulse"></span></p>
                         </div>
 
                         )

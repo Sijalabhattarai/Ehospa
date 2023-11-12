@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 function Appointment() {
     var [appointments, setAppointments] = useState([])
     function getAppointments() {
-        fetch('/api/appointment/getallappoin')
+        fetch('/api/appointment/getallappointment')
             .then(response => response.json())
             .then(data => {
                 setAppointments(data.data)
